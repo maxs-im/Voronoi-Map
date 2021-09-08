@@ -3,9 +3,6 @@
 #include <GLUT/glut.h>
 #include <ctime>
 
-#define WIDTH 1366
-#define HIGHT 768
-
 Voronoi *task;
 
 void make_display();
@@ -16,10 +13,12 @@ void keyboard(unsigned char, int, int);
 void paint(int, int, const std::vector< std::pair<double, double> > &);
 void refreshion();
 
-int main ()
+int main(int argc, char *argv[])
 {
 	srand( time(0) );
-	task= new Voronoi(WIDTH, HIGHT);			// initialize(construct) our class
+	glutInit( &argc, argv);
+	// initialize(construct) our class after glutInit to be able to get WIDTH & HEIGHT
+	task = new Voronoi(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
 	make_display();
 
 	return 0;
@@ -27,8 +26,6 @@ int main ()
 
 void make_display()
 {
-	int argc = 0;
-	glutInit( &argc, nullptr);
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
 	glutCreateWindow("Voronoi");
 
