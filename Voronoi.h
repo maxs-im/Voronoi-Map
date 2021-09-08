@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 class Voronoi		// O(n^4)

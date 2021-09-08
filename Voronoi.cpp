@@ -1,7 +1,7 @@
-#pragma once
 #include "Voronoi.h"
 #include <cmath>
 #include <algorithm>
+#include <cfloat>
 
 Voronoi::Voronoi (int x, int y)				// set our borders on the display
 {

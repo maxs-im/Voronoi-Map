@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Voronoi.h"
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <ctime>
 
 #define WIDTH 1366
@@ -16,11 +16,13 @@ void keyboard(unsigned char, int, int);
 void paint(int, int, const std::vector< std::pair<double, double> > &);
 void refreshion();
 
-void main ()
+int main ()
 {
 	srand( time(0) );
 	task= new Voronoi(WIDTH, HIGHT);			// initialize(construct) our class
 	make_display();
+
+	return 0;
 } // main
 
 void make_display()
