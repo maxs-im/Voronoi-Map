@@ -73,8 +73,9 @@ void keyboard(unsigned char key, int x, int y)
 		if(number_sites == 1) {
 			task->points.erase(task->points.begin());
 			glClear(GL_COLOR_BUFFER_BIT);
-			//glFlush();
 		}
+
+		glFlush();
 	}
 } // keyboard
 void mouse(int button, int state, int x, int y)
@@ -89,6 +90,8 @@ void mouse(int button, int state, int x, int y)
 				// click right to refresh
 	if((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN))
 		refreshion();		// rewrite our diagram (refresh)
+
+    glFlush();
 } // mouse
 void paint(int x, int y, const std::vector< std::pair<double, double> > &mass)
 {
