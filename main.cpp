@@ -3,7 +3,7 @@
 #include <GLUT/glut.h>
 #include <ctime>
 
-Voronoi *task;
+std::unique_ptr<Voronoi> task;
 
 void make_display();
 void display();
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	srand( time(0) );
 	glutInit( &argc, argv);
 	// initialize(construct) our class after glutInit to be able to get WIDTH & HEIGHT
-	task = new Voronoi(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
+	task = std::unique_ptr<Voronoi>(new Voronoi(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT)));
 	make_display();
 
 	return 0;
@@ -57,8 +57,8 @@ void keyboard(unsigned char key, int x, int y)
 {
 			// exit from the program
 	if(key == 27) {
-		delete task;
-		exit(1);
+		task.reset();
+		exit(0);
 	}
 			// delete previous point
 	if(key == 8) {
