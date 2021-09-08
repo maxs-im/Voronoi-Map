@@ -1,39 +1,38 @@
 #include <iostream>
 #include "Voronoi.h"
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <ctime>
 
-#define WIDTH 1366
-#define HIGHT 768
-
-Voronoi *task;
+std::unique_ptr<Voronoi> task;
 
 void make_display();
 void display();
 void reshape(int, int);
 void mouse(int, int, int, int);
-void keyboard(unsigned char, int, int); 
+void keyboard(unsigned char, int, int);
 void paint(int, int, const std::vector< std::pair<double, double> > &);
 void refreshion();
 
-void main ()
+int main(int argc, char *argv[])
 {
 	srand( time(0) );
-	task= new Voronoi(WIDTH, HIGHT);			// initialize(construct) our class
+	glutInit( &argc, argv);
+	// initialize(construct) our class after glutInit to be able to get WIDTH & HEIGHT
+	task = std::unique_ptr<Voronoi>(new Voronoi(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT)));
 	make_display();
+
+	return 0;
 } // main
 
 void make_display()
 {
-	int argc = 0;
-	glutInit( &argc, nullptr);
-	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);	
-	glutCreateWindow("Voronoi");	
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutCreateWindow("Voronoi");
 
 	glutFullScreen();
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glutDisplayFunc(display);				
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);				// window resizing, setting projection parameters
 
 	glutKeyboardFunc(keyboard);				// connection keyboard
@@ -57,9 +56,9 @@ void reshape(int width, int height)
 void keyboard(unsigned char key, int x, int y)
 {
 			// exit from the program
-	if(key == 27) { 
-		delete task;
-		exit(1);
+	if(key == 27) {
+		task.reset();
+		exit(0);
 	}
 			// delete previous point
 	if(key == 8) {
@@ -71,8 +70,9 @@ void keyboard(unsigned char key, int x, int y)
 		if(number_sites == 1) {
 			task->points.erase(task->points.begin());
 			glClear(GL_COLOR_BUFFER_BIT);
-			//glFlush();
 		}
+
+		glFlush();
 	}
 } // keyboard
 void mouse(int button, int state, int x, int y)
@@ -87,9 +87,11 @@ void mouse(int button, int state, int x, int y)
 				// click right to refresh
 	if((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN))
 		refreshion();		// rewrite our diagram (refresh)
+
+    glFlush();
 } // mouse
-void paint(int x, int y, const std::vector< std::pair<double, double> > &mass)				
-{		
+void paint(int x, int y, const std::vector< std::pair<double, double> > &mass)
+{
 	std::cout<< std::endl <<x << " "<< y<< std::endl;			// (*) write our points to the console
 							//random our colour
 	 double colourR= (double) rand()/RAND_MAX,
@@ -98,7 +100,7 @@ void paint(int x, int y, const std::vector< std::pair<double, double> > &mass)
 	glColor3d(colourR, colourG, colourB);
 
 							// draw our VORONOI polygon for each vertex
-	glBegin(GL_POLYGON);		
+	glBegin(GL_POLYGON);
 		 size_t size_mass= mass.size();
 		for(size_t i= 0; i < size_mass; i++) {
 			glVertex2d(mass[i].first, mass[i].second);
@@ -114,7 +116,7 @@ void paint(int x, int y, const std::vector< std::pair<double, double> > &mass)
 void refreshion()
 {
 	std::cout<< "\n\n\t\t REFRESH";			// in the console we would see all the polygons for each site
-	
+
 	task->refresh();
 	 std::vector< std::pair<double, double> > mass;
 	 size_t size_points= task->points.size();

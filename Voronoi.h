@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 class Voronoi		// O(n^4)
@@ -27,7 +29,7 @@ class Voronoi		// O(n^4)
 			double a, b, c;
 		};
 		std::vector <Line> normals;
-		std::vector < std::pair<Point, double> > cross;				//first -- (X,Y) and double -- polar angel (rad) 
+		std::vector < std::pair<Point, double> > cross;				//first -- (X,Y) and double -- polar angel (rad)
 		int rightZone, downZone;
 
 		void fast_add_site(std::vector<Site>::iterator);

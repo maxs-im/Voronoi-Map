@@ -10,7 +10,9 @@
 
 ## Requirements
 - C++11
+- [CMake](https://cmake.org/)
 - [GLUT](https://www.opengl.org/resources/libraries/glut/)
+    - MacOS: ```brew install freeglut```   
 
 ### Repository
 [GitHub](https://github.com/maxs-im/Voronoi-Map)
